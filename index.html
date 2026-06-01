@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Jelanyes System — Tecnología a tu servicio</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --red: #ff0040;
+    --red2: #ff4500;
+    --dark: #060008;
+    --dark2: #0a0010;
+    --white: #f0f0f0;
+    --gray: #888;
+    --glow: 0 0 10px #ff0040, 0 0 30px #ff004060;
+    --glow2: 0 0 6px #ff004080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* Grid background */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,0,64,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,0,64,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ======= NAV ======= */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 40px;
+    background: rgba(6,0,8,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,0,64,0.3);
+  }
+
+  .nav-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: var(--red);
+    text-shadow: var(--glow);
+    letter-spacing: 2px;
+  }
+
+  .nav-logo span { color: var(--white); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+
+  .nav-links a {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--gray);
+    text-decoration: none;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s, text-shadow 0.3s;
+  }
+
+  .nav-links a:hover {
+    color: var(--red);
+    text-shadow: var(--glow2);
+  }
+
+  /* ======= HERO ======= */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 120px 20px 80px;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  /* Animated radial glow bg */
+  .hero::before {
+    content: '';
+    position: absolute;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,0,64,0.12) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  /* Hexagon badge */
+  .hex-badge {
+    width: 100px; height: 116px;
+    background: linear-gradient(135deg, #ff0040, #ff4500);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 2.8rem;
+    font-weight: 900;
+    color: white;
+    margin-bottom: 32px;
+    box-shadow: var(--glow);
+    animation: hexFloat 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  @keyframes hexFloat {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .hero h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: 6px;
+    line-height: 1;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 .red { color: var(--red); text-shadow: var(--glow); }
+
+  .hero .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.75rem, 2vw, 1rem);
+    color: var(--red);
+    letter-spacing: 4px;
+    margin-top: 12px;
+    margin-bottom: 20px;
+    text-shadow: var(--glow2);
+    animation: fadeUp 0.8s 0.2s ease both;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero .tagline {
+    font-size: 1.2rem;
+    color: #aaa;
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.4s ease both;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+
+  .btn {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 14px 32px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    cursor: pointer;
+    border: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(90deg, var(--red), var(--red2));
+    color: white;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    box-shadow: var(--glow);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px #ff0040, 0 0 50px #ff004060;
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--red);
+    border: 1px solid var(--red);
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+
+  .btn-outline:hover {
+    background: rgba(255,0,64,0.1);
+    transform: translateY(-3px);
+    box-shadow: var(--glow2);
+  }
+
+  /* Scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    animation: bounce 2s infinite;
+    z-index: 2;
+  }
+
+  .scroll-indicator span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--red);
+    letter-spacing: 3px;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(8px); }
+  }
+
+  /* ======= SECTIONS ======= */
+  section {
+    position: relative;
+    z-index: 1;
+    padding: 100px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--red);
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    text-shadow: var(--glow2);
+  }
+
+  .section-title {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 900;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    line-height: 1.1;
+  }
+
+  .section-title .red { color: var(--red); text-shadow: var(--glow2); }
+
+  .section-line {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--red), transparent);
+    margin-bottom: 48px;
+  }
+
+  /* ======= SERVICES ======= */
+  #servicios { background: transparent; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .service-card {
+    background: rgba(255,0,64,0.04);
+    border: 1px solid rgba(255,0,64,0.2);
+    padding: 36px 28px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 16px 100%, 0 calc(100% - 16px));
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,0,64,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .service-card:hover {
+    border-color: var(--red);
+    transform: translateY(-6px);
+    box-shadow: 0 0 30px rgba(255,0,64,0.2), inset 0 0 30px rgba(255,0,64,0.05);
+  }
+
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    font-size: 2.4rem;
+    margin-bottom: 20px;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(255,0,64,0.6));
+  }
+
+  .service-card h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .service-card p {
+    font-size: 0.95rem;
+    color: #999;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .service-price {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--red);
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,0,64,0.2);
+    text-shadow: var(--glow2);
+  }
+
+  /* Corner accent */
+  .service-card .corner {
+    position: absolute;
+    top: 0; right: 0;
+    width: 40px; height: 40px;
+    border-top: 2px solid var(--red);
+    border-right: 2px solid var(--red);
+    opacity: 0.5;
+    transition: opacity 0.3s;
+  }
+  .service-card:hover .corner { opacity: 1; }
+
+  /* ======= STATS ======= */
+  .stats-bar {
+    background: linear-gradient(90deg, rgba(255,0,64,0.08), rgba(255,69,0,0.08));
+    border-top: 1px solid rgba(255,0,64,0.2);
+    border-bottom: 1px solid rgba(255,0,64,0.2);
+    padding: 60px 40px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Orbitron', monospace;
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--red);
+    text-shadow: var(--glow);
+    display: block;
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #666;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* ======= ABOUT ======= */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .about-visual {
+    position: relative;
+    height: 400px;
+  }
+
+  .about-hex {
+    width: 200px;
+    height: 230px;
+    background: linear-gradient(135deg, rgba(255,0,64,0.15), rgba(255,69,0,0.08));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    border: 2px solid rgba(255,0,64,0.4);
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+  }
+
+  .about-hex:nth-child(1) { top: 20px; left: 20px; animation: hexFloat 3s ease-in-out infinite; }
+  .about-hex:nth-child(2) { top: 100px; left: 160px; animation: hexFloat 3s 1s ease-in-out infinite; width: 150px; height: 173px; font-size: 3.5rem; opacity: 0.7; }
+  .about-hex:nth-child(3) { top: 200px; left: 60px; animation: hexFloat 3s 0.5s ease-in-out infinite; width: 130px; height: 150px; font-size: 3rem; opacity: 0.5; }
+
+  .about-content p {
+    font-size: 1.05rem;
+    color: #aaa;
+    line-height: 1.9;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+
+  .about-content p strong {
+    color: var(--white);
+    font-weight: 600;
+  }
+
+  .feature-list {
+    list-style: none;
+    margin-top: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .feature-list li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #ccc;
+    letter-spacing: 1px;
+  }
+
+  .feature-list li::before {
+    content: '▸';
+    color: var(--red);
+    text-shadow: var(--glow2);
+    font-size: 1.1rem;
+  }
+
+  /* ======= GALLERY ======= */
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 200px 200px;
+    gap: 12px;
+  }
+
+  .gallery-item {
+    background: rgba(255,0,64,0.06);
+    border: 1px solid rgba(255,0,64,0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: pointer;
+  }
+
+  .gallery-item:nth-child(1) { grid-column: span 2; }
+  .gallery-item:nth-child(4) { grid-column: span 2; }
+
+  .gallery-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,0,64,0.15), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .gallery-item:hover {
+    border-color: rgba(255,0,64,0.5);
+    box-shadow: 0 0 20px rgba(255,0,64,0.15);
+    transform: scale(1.02);
+  }
+
+  .gallery-item:hover::after { opacity: 1; }
+
+  .gallery-item span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--red);
+    letter-spacing: 2px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  /* ======= CONTACT ======= */
+  #contacto {
+    padding-bottom: 60px;
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px;
+    background: rgba(255,0,64,0.04);
+    border: 1px solid rgba(255,0,64,0.15);
+    transition: all 0.3s;
+  }
+
+  .contact-item:hover {
+    border-color: var(--red);
+    background: rgba(255,0,64,0.08);
+  }
+
+  .contact-icon { font-size: 1.8rem; }
+
+  .contact-item h4 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+
+  .contact-item p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    color: var(--white);
+  }
+
+  .contact-item small {
+    font-size: 0.8rem;
+    color: #666;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .whatsapp-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: linear-gradient(90deg, #25D366, #128C7E);
+    color: white;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin-top: 12px;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    transition: all 0.3s;
+    box-shadow: 0 0 20px rgba(37,211,102,0.3);
+  }
+
+  .whatsapp-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(37,211,102,0.5);
+  }
+
+  /* CTA box */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(255,0,64,0.1), rgba(255,69,0,0.05));
+    border: 1px solid rgba(255,0,64,0.3);
+    padding: 48px 40px;
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+  }
+
+  .cta-box h3 {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.3rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+    color: var(--white);
+  }
+
+  .cta-box p {
+    font-size: 1rem;
+    color: #999;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+
+  .schedule-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .schedule-list li {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: #aaa;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .schedule-list li span { color: var(--red); }
+
+  /* ======= FOOTER ======= */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid rgba(255,0,64,0.2);
+    padding: 40px;
+    text-align: center;
+    background: rgba(0,0,0,0.5);
+  }
+
+  .footer-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--red);
+    text-shadow: var(--glow);
+    letter-spacing: 4px;
+    margin-bottom: 12px;
+  }
+
+  footer p {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: #444;
+    letter-spacing: 2px;
+  }
+
+  footer .red { color: var(--red); }
+
+  /* ======= ANIMATIONS ======= */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ======= MOBILE ======= */
+  @media (max-width: 768px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    section { padding: 70px 20px; }
+    .about-grid { grid-template-columns: 1fr; }
+    .about-visual { height: 250px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-item:nth-child(1),
+    .gallery-item:nth-child(4) { grid-column: span 1; }
+    .stats-bar { gap: 40px; padding: 40px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">JELANYES<span> SYSTEM</span></div>
+  <ul class="nav-links">
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#nosotros">Nosotros</a></li>
+    <li><a href="#galeria">Galería</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hex-badge">J</div>
+  <div class="subtitle">// tech . ventas . soporte //</div>
+  <h1><span class="red">JELANYES</span><br>SYSTEM</h1>
+  <p class="tagline">Tu aliado tecnológico en Colombia. Vendemos equipos usados garantizados y ofrecemos mantenimiento de software a domicilio.</p>
+  <div class="hero-btns">
+    <a href="#servicios" class="btn btn-primary">Ver servicios</a>
+    <a href="#contacto" class="btn btn-outline">Contáctanos</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>SCROLL</span>
+    <div class="scroll-line"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num">100%</span>
+    <div class="stat-label">Garantizado</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">24H</span>
+    <div class="stat-label">Respuesta</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">DOM</span>
+    <div class="stat-label">A domicilio</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">+10</span>
+    <div class="stat-label">Servicios</div>
+  </div>
+</div>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="reveal">
+    <div class="section-label">// 01 — Servicios</div>
+    <h2 class="section-title">Lo que <span class="red">hacemos</span></h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="services-grid">
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">🪟</span>
+      <h3>Instalación de Windows</h3>
+      <p>Instalamos Windows 10, 11 y versiones anteriores. Sistema limpio, activado y listo para usar con todos sus drivers.</p>
+      <div class="service-price">Desde $40.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">🐧</span>
+      <h3>Instalación de Linux</h3>
+      <p>Instalamos Linux Mint, Ubuntu, Zorin OS y más. Ideal para equipos viejos o quienes quieren salir de Windows.</p>
+      <div class="service-price">Desde $40.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">🦠</span>
+      <h3>Eliminación de Virus</h3>
+      <p>Limpieza profunda de malware, ransomware y adware. Recuperamos tu equipo y lo dejamos protegido.</p>
+      <div class="service-price">Desde $40.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">⚡</span>
+      <h3>Optimización del Sistema</h3>
+      <p>Tu equipo lento vuelve a volar. Limpieza, ajuste de inicio, liberación de RAM y disco.</p>
+      <div class="service-price">Desde $30.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">💾</span>
+      <h3>Recuperación de Datos</h3>
+      <p>Recuperamos archivos borrados, fotos, documentos y más. Discos dañados, formateados o con errores.</p>
+      <div class="service-price">Desde $80.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">📦</span>
+      <h3>Instalación de Programas</h3>
+      <p>Office, antivirus, Adobe, navegadores y todo lo que necesites. Instalación completa y configurada.</p>
+      <div class="service-price">Desde $20.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">🖥️</span>
+      <h3>Venta de Equipos Usados</h3>
+      <p>Computadores portátiles y de escritorio revisados, garantizados y con sistema instalado. Listos para trabajar.</p>
+      <div class="service-price">Consultar disponibilidad</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">🏠</span>
+      <h3>Servicio a Domicilio</h3>
+      <p>Vamos hasta tu casa u oficina. Sin que tengas que desconectar nada. Rápido, cómodo y profesional.</p>
+      <div class="service-price">Desde $10.000 COP</div>
+    </div>
+
+    <div class="service-card reveal">
+      <div class="corner"></div>
+      <span class="service-icon">🔧</span>
+      <h3>Servicio Completo</h3>
+      <p>Reinstalación + programas + optimización + antivirus. Todo en un solo servicio al mejor precio.</p>
+      <div class="service-price">Desde $80.000 COP</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- NOSOTROS -->
+<section id="nosotros">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-hex">💻</div>
+      <div class="about-hex">🔧</div>
+      <div class="about-hex">⚡</div>
+    </div>
+    <div class="about-content reveal">
+      <div class="section-label">// 02 — Nosotros</div>
+      <h2 class="section-title">¿Por qué elegir<br><span class="red">Jelanyes System?</span></h2>
+      <div class="section-line"></div>
+      <p>Somos un equipo joven y apasionado por la tecnología. Con experiencia real resolviendo problemas de software, instalando sistemas operativos y recuperando equipos que parecían perdidos.</p>
+      <p><strong>No somos una empresa genérica.</strong> Somos técnicos que amamos lo que hacemos y lo hacemos bien. Cada equipo que pasa por nuestras manos queda funcionando como debe.</p>
+      <ul class="feature-list">
+        <li>Servicio garantizado o te devolvemos el dinero</li>
+        <li>Atención rápida y respuesta en menos de 24 horas</li>
+        <li>Domicilio disponible en tu ciudad</li>
+        <li>Precios justos y transparentes</li>
+        <li>Soporte post-servicio incluido</li>
+        <li>Equipos usados revisados y certificados</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="galeria" style="padding-top:0">
+  <div class="reveal">
+    <div class="section-label">// 03 — Galería</div>
+    <h2 class="section-title">Nuestro <span class="red">trabajo</span></h2>
+    <div class="section-line"></div>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item">
+      <span>🖥️</span>
+      <span>EQUIPOS DISPONIBLES</span>
+    </div>
+    <div class="gallery-item">
+      <span>🔧</span>
+      <span>MANTENIMIENTO</span>
+    </div>
+    <div class="gallery-item">
+      <span>💿</span>
+      <span>INSTALACIONES</span>
+    </div>
+    <div class="gallery-item">
+      <span>📲</span>
+      <span>SOPORTE REMOTO</span>
+    </div>
+    <div class="gallery-item">
+      <span>⚡</span>
+      <span>OPTIMIZACIÓN</span>
+    </div>
+  </div>
+  <p style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:#555;letter-spacing:2px;margin-top:20px;text-align:center;">
+    // Próximamente fotos reales de nuestros servicios //
+  </p>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="reveal">
+    <div class="section-label">// 04 — Contacto</div>
+    <h2 class="section-title">Hablemos de tu <span class="red">equipo</span></h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid">
+    <div class="contact-info reveal">
+
+      <div class="contact-item">
+        <span class="contact-icon">📲</span>
+        <div>
+          <h4>WhatsApp / Llamadas</h4>
+          <p>323 217 8755</p>
+          <small>Respuesta en menos de 1 hora</small>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <span class="contact-icon">📍</span>
+        <div>
+          <h4>Cobertura</h4>
+          <p>Colombia</p>
+          <small>Domicilio y envíos disponibles</small>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <span class="contact-icon">🕐</span>
+        <div>
+          <h4>Horario</h4>
+          <p>Lun — Sáb: 8am — 8pm</p>
+          <small>Dom: con cita previa</small>
+        </div>
+      </div>
+
+      <a href="https://wa.me/573232178755?text=Hola%20Jelanyes%20System!%20Necesito%20ayuda%20con%20mi%20equipo." class="whatsapp-btn" target="_blank">
+        💬 Escribir por WhatsApp
+      </a>
+
+    </div>
+
+    <div class="cta-box reveal">
+      <h3>¿LISTO PARA COMENZAR?</h3>
+      <p>Cuéntanos qué necesitas y te damos una solución rápida. Sin complicaciones, sin letra pequeña.</p>
+
+      <ul class="schedule-list">
+        <li>Instalación de Windows <span>$40.000+</span></li>
+        <li>Eliminación de virus <span>$40.000+</span></li>
+        <li>Optimización <span>$30.000+</span></li>
+        <li>Recuperación de datos <span>$80.000+</span></li>
+        <li>Domicilio <span>$10.000+</span></li>
+        <li>Servicio completo <span>$80.000+</span></li>
+      </ul>
+
+      <a href="https://wa.me/573232178755" class="btn btn-primary" target="_blank">Solicitar servicio ahora</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">JELANYES SYSTEM</div>
+  <p>// tech . ventas . soporte // Colombia 🇨🇴</p>
+  <br>
+  <p>323 217 8755 &nbsp;|&nbsp; <span class="red">Servicio a domicilio disponible</span></p>
+  <br>
+  <p style="color:#222">© 2025 Jelanyes System — Todos los derechos reservados</p>
+</footer>
+
+<script>
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth active nav
+  const sections = document.querySelectorAll('section[id], div[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 200) current = sec.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? '#ff0040' : '';
+    });
+  });
+</script>
+</body>
+</html>
